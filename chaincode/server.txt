@@ -1,0 +1,4 @@
+ssh alice@49.235.72.8
+
+docker exec -it cli bash
+peer chaincode list --instantiated -C mychannel

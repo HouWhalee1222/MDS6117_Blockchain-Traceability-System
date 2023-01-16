@@ -133,21 +133,17 @@ func transfer(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 	if len(args) != 4 {
 		return "", fmt.Errorf("Incorrect arguments. Expecting 4 parameters.")
 	}
-
 	value, err := stub.GetState(args[0])
 	if err != nil {
 		return "", fmt.Errorf("Failed to query asset: %s with error: %s", args[0], err)
 	}
-
 	if value == nil {
 		return "", fmt.Errorf("Asset not found: %s", args[0])
 	}
-
 	value_string := strings.Split(string(value), "&")
 	if args[1] != value_string[5] {
 		return "", fmt.Errorf("Failed to transfer asset: %s with error: %s", args[0], "Incorrect ownership")
 	}
-
 	new_value := value_string[0]
 	for i := 1; i <= 4; i++ {
 		new_value += "&" + value_string[i]
@@ -155,7 +151,6 @@ func transfer(stub shim.ChaincodeStubInterface, args []string) (string, error) {
 	new_value += "&" + args[2]  // New ownership
 	new_value += "&" + args[3]  // New ownerContact
 	new_value += "&" + args[2] + " <-- " + value_string[7]  // New history owner
-
 	put_err := stub.PutState(args[0], []byte(new_value))
 	if put_err != nil {
 		return "", fmt.Errorf("Failed to transfer asset: %s", args[0])
